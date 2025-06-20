@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Item - Second Hand Resells</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      color: #222;
+    }
+
+    .navbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid #eee;
+      padding: 1rem 0;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      height: 40px;
+      margin-right: 10px;
+      border-radius: 8px;
+    }
+
+    .brand-name {
+      font-size: 1.3rem;
+      color: #0057ff;
+      font-weight: 600;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav a.active,
+    nav a:hover {
+      color: #0057ff;
+    }
+
+    .main-content {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .form-section h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #003366;
+    }
+
+    .form-card {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #0057ff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0046d5;
+    }
+
+    .flash {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .flash.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .flash.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .footer {
+      background-color: #0051a3;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo-wrapper">
+        <img src="{{ url_for('static', filename='images/your-logo.jpg') }}" alt="Second Hand Resells Logo" class="logo-img">
+        <div class="brand-name">Second Hand Resells</div>
+      </div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/listings">Listings</a>
+        <a href="/contact">Contact</a>
+        {% if session.admin_logged_in %}
+          <a href="/logout" class="logout-btn">Logout</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="form-section animate-fadeInUp">
+      <h2>Post a New Item</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('post') }}" method="POST" enctype="multipart/form-data" class="form-card">
+        <div class="form-group">
+          <label for="title">Item Title:</label>
+          <input type="text" name="title" id="title" required />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category:</label>
+          <select name="category" id="category" required>
+            <option value="">-- Select a Category --</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Lands">Lands</option>
+            <option value="Business">Business</option>
+            <option value="Home Appliance">Home Appliance</option>
+            <option value="Spare Parts">Spare Parts</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="buying_price">Buying Price (KES):</label>
+          <input type="number" name="buying_price" id="buying_price" required />
+        </div>
+
+        <div class="form-group">
+          <label for="selling_price">Selling Price (KES):</label>
+          <input type="number" name="selling_price" id="selling_price" required />
+        </div>
+
+        <div class="form-group">
+          <label for="reason">Reason for Selling:</label>
+          <textarea name="reason" id="reason" rows="2" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location:</label>
+          <input type="text" name="location" id="location" required />
+        </div>
+
+        <div class="form-group">
+          <label for="contact">Contact (Phone/WhatsApp):</label>
+          <input type="text" name="contact" id="contact" required />
+        </div>
+
+        <div class="form-group">
+          <label for="image">Upload Image:</label>
+          <input type="file" name="image" id="image" accept="image/*" />
+        </div>
+
+        <button type="submit" class="button primary-btn">Submit Item</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Second Hand Resells. Made with ❤️ in Nairobi. All rights reserved.</p>
+  </footer>
+
+  <!-- ✅ Auto logout when the user leaves this page -->
+  <script>
+    window.addEventListener("beforeunload", function () {
+      navigator.sendBeacon("/auto_logout");
+    });
+  </script>
+</body>
+</html>

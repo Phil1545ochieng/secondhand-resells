@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Second Hand Resells</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- Font Awesome for Instagram icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .contact-section {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    .contact-section h2 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .contact-info,
+    .contact-section p,
+    .contact-section a {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 0.75rem 1.25rem;
+      background-color: #0070f3;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .button:hover {
+      background-color: #0051a3;
+    }
+
+    .instagram-btn {
+      background-color: #E1306C;
+    }
+
+    .instagram-btn:hover {
+      background-color: #c2265c;
+    }
+
+    .social-icon {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo-wrapper">
+        <img src="{{ url_for('static', filename='images/your-logo.jpg') }}" alt="Second Hand Resells Logo" class="logo-img">
+        <div class="brand-name">Second Hand Resells</div>
+      </div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/listings">Listings</a>
+        <a href="/post">Post</a>
+        <a href="/contact" class="active">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Contact Section -->
+  <main class="main-content fade-in">
+    <section class="contact-section">
+      <h2>Get in Touch</h2>
+      <p>You can contact us directly through any of the options below:</p>
+
+      <p class="contact-info"><strong>Email:</strong> fredrickandros@gmail.com</p>
+
+      <a class="button whatsapp-btn" href="https://wa.me/254794040674" target="_blank">
+        <i class="fab fa-whatsapp social-icon"></i> Chat on WhatsApp
+      </a>
+
+      <p>Or join our community group:</p>
+      <a class="button group-btn" href="https://chat.whatsapp.com/J3nT8ftZ4R27qOCl0DKmr8" target="_blank">
+        <i class="fab fa-whatsapp social-icon"></i> Join WhatsApp Group
+      </a>
+
+      <p>Follow us on Instagram:</p>
+      <a class="button instagram-btn" href="https://www.instagram.com/fede_andros?igsh=YzljYTk1ODg3Zg==" target="_blank">
+        <i class="fab fa-instagram social-icon"></i> @fede_andros
+      </a>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Second Hand Resells. Made with ❤️ in Nairobi</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,528 @@
+/* Stripe-Inspired Light Theme CSS */
+/* Reset & Base Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #ffffff;
+  color: #1f1f1f;
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  color: #0d0d0d;
+}
+
+/* Logo and Branding */
+.logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.logo-img {
+  width: 120px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #2563eb;
+}
+
+/* Navigation */
+.navbar {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.nav-container h2 {
+  color: #2563eb;
+}
+
+.nav-container nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-container nav a:hover {
+  color: #2563eb;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background-color: #f3f4f6;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #4b5563;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Features */
+.features {
+  display: flex;
+  justify-content: space-around;
+  padding: 60px 20px;
+  background: #ffffff;
+  flex-wrap: wrap;
+}
+
+.feature {
+  max-width: 300px;
+  text-align: center;
+  margin: 20px;
+}
+
+/* Listings */
+.featured {
+  padding: 60px 20px;
+  background-color: #f9fafb;
+  text-align: center;
+}
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.card h4 {
+  margin-top: 0;
+  color: #111827;
+}
+
+/* Footer */
+.footer {
+  background-color: #f3f4f6;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer p {
+  margin: 0;
+  color: #6b7280;
+}
+/* Features Section Styling */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.feature {
+  background-color: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+}
+
+/* How to Advertise Section */
+.how-to-advertise {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem auto;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+  line-height: 1.7;
+}
+
+.how-to-advertise h2 {
+  color: #222;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.how-to-advertise h3 {
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.how-to-advertise ul,
+.how-to-advertise ol {
+  padding-left: 1.5rem;
+}
+
+.how-to-advertise li {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Container */
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Optional: Light Theme Override */
+body.light-theme {
+  background-color: #f3f3f3;
+  color: #222;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* Fade-in Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply Animation to Sections */
+.features .feature,
+.how-to-advertise,
+.hero h2,
+.hero p {
+  animation: fadeInUp 1s ease forwards;
+  opacity: 0; /* Start hidden */
+}
+
+/* Delay feature cards for staggered entry */
+.features .feature:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.features .feature:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.features .feature:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+/* Smooth Button Hover Effect */
+button,
+a.button-link {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+button:hover,
+a.button-link:hover {
+  transform: translateY(-2px);
+  background-color: #222;
+  color: #fff;
+}
+
+/* Add a soft entrance for logo and nav */
+.navbar,
+.logo {
+  animation: fadeInUp 0.8s ease-in-out forwards;
+  opacity: 0;
+}
+.hero-section {
+  background-image: url('../images/second-hand-bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 80px 20px;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Overlay for readability */
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border-radius: 10px;
+  display: inline-block;
+  max-width: 800px;
+  margin: auto;
+}
+body {
+  font-family: system-ui, sans-serif;
+  background: #ffffff;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.navbar, .footer {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.nav-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links a {
+  margin-left: 1.2rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.hero ul ul {
+  margin-left: 1rem;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-around;
+}
+
+.feature-card {
+  background: #f6f9fc;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 250px;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Base styles */
+body {
+  font-family: system-ui, sans-serif;
+  background: #ffffff;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar and Footer */
+.navbar, .footer {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.footer {
+  background-color: #0074D9;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Hero with background */
+.hero {
+  position: relative;
+  background: url("../images/second-hand-bg.jpg") no-repeat center center;
+  background-size: cover;
+  color: white;
+  padding: 4rem 1rem;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.hero-list {
+  line-height: 1.7;
+  margin-top: 1rem;
+}
+
+/* Features */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-around;
+  padding: 2rem 1rem;
+  background-color: #f6f9fc;
+}
+
+.feature-card {
+  background: white;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 250px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Layout */
+.container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeInUp {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+.search-form {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.search-form input {
+  padding: 0.5rem 1rem;
+  width: 60%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+}
+
+.search-form button {
+  padding: 0.5rem 1rem;
+  background-color: #0057ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.search-form button:hover {
+  background-color: #003fbd;
+}
