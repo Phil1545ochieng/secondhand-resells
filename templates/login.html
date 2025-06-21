@@ -4,7 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login - Second Hand Resells</title>
+
+  <!-- ✅ SEO Meta Tags -->
+  <meta name="description" content="Admin access to manage listings on Second Hand Resells, Nairobi’s trusted marketplace for used items.">
+  <meta name="keywords" content="admin login, second hand resells admin, Nairobi resale dashboard, manage posts secondhand">
+  <meta name="author" content="Second Hand Resells Team">
+  <!-- Optional: Prevent indexing of admin page -->
+  <!-- <meta name="robots" content="noindex, nofollow"> -->
+
+  <!-- ✅ Open Graph (Facebook, WhatsApp) -->
+  <meta property="og:title" content="Admin Login | Second Hand Resells">
+  <meta property="og:description" content="Log in to manage second-hand item listings and approve new posts.">
+  <meta property="og:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
+  <meta property="og:url" content="https://secondhandresells.onrender.com/admin">
+  <meta property="og:type" content="website">
+
+  <!-- ✅ Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Admin Login | Second Hand Resells Nairobi">
+  <meta name="twitter:description" content="Access the admin dashboard for posting and managing Nairobi resale ads.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
   <style>
     .login-container {
       max-width: 400px;
@@ -105,7 +127,7 @@
   </div>
 
   <footer class="footer">
-    &copy; 2025 Second Hand Resells. Made with ❤️ in Nairobi . All rights reserved.</p>
+    &copy; 2025 Second Hand Resells. Made with ❤️ in Nairobi. All rights reserved.
   </footer>
 </body>
 </html>

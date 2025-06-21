@@ -3,7 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Post Item - Second Hand Resells</title>
+  <title>Post Item | Second Hand Resells</title>
+
+  <!-- ✅ SEO Meta Tags -->
+  <meta name="description" content="Post your second-hand item on Second Hand Resells. Reach potential buyers in Nairobi with ease. Fast, free, and verified listings.">
+  <meta name="keywords" content="post item, second-hand resell, sell used products, Nairobi online marketplace, second hand Kenya, upload item for sale">
+  <meta name="author" content="Second Hand Resells Team">
+
+  <!-- ✅ Open Graph (Facebook, WhatsApp, LinkedIn) -->
+  <meta property="og:title" content="Post Your Item | Second Hand Resells">
+  <meta property="og:description" content="Sell your second-hand item easily. Upload a listing and reach buyers across Nairobi.">
+  <meta property="og:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
+  <meta property="og:url" content="https://secondhandresells.onrender.com/post">
+  <meta property="og:type" content="website">
+
+  <!-- ✅ Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Post Your Item | Second Hand Resells">
+  <meta name="twitter:description" content="Sell your second-hand items with ease. Post a listing and connect with buyers.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <style>
     body {
@@ -227,7 +246,6 @@
     <p>&copy; 2025 Second Hand Resells. Made with ❤️ in Nairobi. All rights reserved.</p>
   </footer>
 
-  <!-- ✅ Auto logout when the user leaves this page -->
   <script>
     window.addEventListener("beforeunload", function () {
       navigator.sendBeacon("/auto_logout");
