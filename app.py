@@ -3,19 +3,27 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
+import logging
+
+# Enable logging for debugging on Render
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with strong secret
+app.secret_key = 'your_secret_key'  # Replace with a strong secret key
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 DATABASE_PATH = os.path.join(basedir, 'database', 'secondhand.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
+# Admin credentials
 ADMIN_USERNAME = "Androsvela"
 ADMIN_PASSWORD = "Androsvela@23"
 
@@ -75,11 +83,10 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
-# 🔁 Auto logout route for background logout on page unload
 @app.route('/auto_logout', methods=['POST'])
 def auto_logout():
     session.pop('admin_logged_in', None)
-    return '', 204  # No content, just silent logout
+    return '', 204  # Silent logout
 
 @app.route('/post', methods=['GET', 'POST'])
 def post():
@@ -100,7 +107,8 @@ def post():
         image_filename = None
         if file and allowed_file(file.filename):
             image_filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+            file.save(file_path)
 
         new_post = Post(
             title=title,
@@ -112,6 +120,7 @@ def post():
             contact=contact,
             image_filename=image_filename
         )
+
         db.session.add(new_post)
         db.session.commit()
 
@@ -120,10 +129,13 @@ def post():
 
     return render_template('post.html')
 
-# -------------------- Main --------------------
+# -------------------- Setup folders & DB always --------------------
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(os.path.join(basedir, 'database'), exist_ok=True)
+
+with app.app_context():
+    db.create_all()
+
+# -------------------- Main Entry Point --------------------
 if __name__ == '__main__':
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    os.makedirs(os.path.join(basedir, 'database'), exist_ok=True)
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
