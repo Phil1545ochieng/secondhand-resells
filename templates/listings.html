@@ -5,26 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Listings | Second Hand Resells</title>
 
-  <!-- SEO Metadata -->
+  <!-- Meta Tags -->
   <meta name="description" content="Browse quality second-hand items in Nairobi including furniture, electronics, and more at Second Hand Resells.">
   <meta name="keywords" content="second-hand items Nairobi, used items Kenya, buy sell Nairobi, Second Hand Resells">
-  <meta name="author" content="Phillip Ochieng">
-
-  <!-- Open Graph for social sharing -->
+  <meta name="author" content="Second Hand Resells Team">
   <meta property="og:title" content="Second Hand Listings | Nairobi Deals">
   <meta property="og:description" content="Explore verified second-hand listings in Nairobi. Affordable, negotiable prices.">
   <meta property="og:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
   <meta property="og:url" content="https://secondhandresells.onrender.com/listings">
   <meta property="og:type" content="website">
-
-  <!-- Twitter Metadata -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Second Hand Listings | Nairobi Deals">
   <meta name="twitter:description" content="Find and list second-hand items in Nairobi.">
   <meta name="twitter:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
-
-  <!-- Canonical Link -->
-  <link rel="canonical" href="https://secondhandresells.onrender.com/listings" />
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
@@ -119,11 +112,6 @@
       border-radius: 8px;
       margin-bottom: 1rem;
       cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .card img:hover {
-      transform: scale(1.05);
     }
 
     .card h4 {
@@ -142,6 +130,35 @@
       padding: 1rem;
       text-align: center;
       margin-top: 3rem;
+    }
+
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .lightbox-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
@@ -172,7 +189,7 @@
           {% for post in items %}
             <div class="card">
               {% if post.image_filename %}
-                <a href="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" target="_blank">
+                <a href="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" class="lightbox-trigger">
                   <img src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" alt="{{ post.title }}">
                 </a>
               {% else %}
@@ -195,6 +212,30 @@
   <footer class="footer">
     <p>&copy; 2025 Second Hand Resells. Made with ❤️ in Nairobi. All rights reserved.</p>
   </footer>
+
+  <!-- Lightbox HTML -->
+  <div class="lightbox-overlay" id="lightbox">
+    <img id="lightbox-img" src="" alt="Preview">
+  </div>
+
+  <!-- Lightbox JavaScript -->
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    document.querySelectorAll('.lightbox-trigger').forEach(trigger => {
+      trigger.addEventListener('click', e => {
+        e.preventDefault();
+        lightboxImg.src = trigger.getAttribute('href');
+        lightbox.classList.add('active');
+      });
+    });
+
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    });
+  </script>
 
 </body>
 </html>
