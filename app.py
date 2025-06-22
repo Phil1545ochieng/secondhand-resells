@@ -17,8 +17,9 @@ UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-DATABASE_PATH = os.path.join(basedir, 'database', 'secondhand.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
+
+# ✅ Use PostgreSQL (Render)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://secondhand_db_g9nk_user:vWBNoeEPOC94C7EU1lx76KtH2AZUcH4f@dpg-d1c6grje5dus73f8um8g-a.oregon-postgres.render.com/secondhand_db_g9nk'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -131,7 +132,6 @@ def post():
 
 # -------------------- Setup folders & DB always --------------------
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-os.makedirs(os.path.join(basedir, 'database'), exist_ok=True)
 
 with app.app_context():
     db.create_all()
