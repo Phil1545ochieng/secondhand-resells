@@ -8,7 +8,7 @@
   <!-- Meta Tags -->
   <meta name="description" content="Browse quality second-hand items in Nairobi including furniture, electronics, and more at Second Hand Resells.">
   <meta name="keywords" content="second-hand items Nairobi, used items Kenya, buy sell Nairobi, Second Hand Resells">
-  <meta name="author" content="Second Hand Resells Team">
+  <meta name="author" content="Phillip Ochieng">
   <meta property="og:title" content="Second Hand Listings | Nairobi Deals">
   <meta property="og:description" content="Explore verified second-hand listings in Nairobi. Affordable, negotiable prices.">
   <meta property="og:image" content="{{ url_for('static', filename='images/your-logo.jpg') }}">
@@ -189,8 +189,8 @@
           {% for post in items %}
             <div class="card">
               {% if post.image_filename %}
-                <a href="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" class="lightbox-trigger">
-                  <img src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" alt="{{ post.title }}">
+                <a href="{{ post.image_filename }}" class="lightbox-trigger">
+                  <img src="{{ post.image_filename }}" alt="{{ post.title }}">
                 </a>
               {% else %}
                 <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="No image">
