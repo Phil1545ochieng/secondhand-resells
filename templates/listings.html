@@ -108,7 +108,7 @@
     .card img {
       width: 100%;
       height: 220px;
-      object-fit: contain;
+      object-fit: cover;
       border-radius: 8px;
       margin-bottom: 1rem;
       cursor: pointer;
@@ -190,10 +190,10 @@
             <div class="card">
               {% if post.image_filename %}
                 <a href="{{ post.image_filename }}" class="lightbox-trigger">
-                  <img src="{{ post.image_filename }}" alt="{{ post.title }}">
+                  <img src="{{ post.image_filename }}" alt="{{ post.title }}" loading="lazy">
                 </a>
               {% else %}
-                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="No image">
+                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="No image" loading="lazy">
               {% endif %}
               <h4>{{ post.title }}</h4>
               <p><strong>Category:</strong> {{ post.category }}</p>
