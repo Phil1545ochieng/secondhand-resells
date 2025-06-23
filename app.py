@@ -3,28 +3,38 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
 import logging
 
-# Enable logging for debugging on Render
+# Enable logging for debugging
 logging.basicConfig(level=logging.DEBUG)
 
+# Load environment variables from .env
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with a strong secret key
+app.secret_key = 'your_secret_key'  # Replace with strong key
 
+# Upload folder for local fallback (not used for Render/Cloudinary)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# ✅ Use PostgreSQL (Render)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://secondhand_db_g9nk_user:vWBNoeEPOC94C7EU1lx76KtH2AZUcH4f@dpg-d1c6grje5dus73f8um8g-a.oregon-postgres.render.com/secondhand_db_g9nk'
+# PostgreSQL DB on Render
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///fallback.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Admin credentials
+# Configure Cloudinary from .env
+cloudinary.config()
+
+# Admin login credentials
 ADMIN_USERNAME = "Androsvela"
 ADMIN_PASSWORD = "Androsvela@23"
 
@@ -38,7 +48,7 @@ class Post(db.Model):
     reason = db.Column(db.Text)
     location = db.Column(db.String(100))
     contact = db.Column(db.String(100))
-    image_filename = db.Column(db.String(100))
+    image_filename = db.Column(db.String(300))  # Now stores Cloudinary URL
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # -------------------- Helpers --------------------
@@ -87,7 +97,7 @@ def logout():
 @app.route('/auto_logout', methods=['POST'])
 def auto_logout():
     session.pop('admin_logged_in', None)
-    return '', 204  # Silent logout
+    return '', 204
 
 @app.route('/post', methods=['GET', 'POST'])
 def post():
@@ -107,9 +117,9 @@ def post():
 
         image_filename = None
         if file and allowed_file(file.filename):
-            image_filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
-            file.save(file_path)
+            # ✅ Upload to Cloudinary
+            upload_result = cloudinary.uploader.upload(file)
+            image_filename = upload_result.get('secure_url')  # Store the hosted image URL
 
         new_post = Post(
             title=title,
@@ -130,12 +140,10 @@ def post():
 
     return render_template('post.html')
 
-# -------------------- Setup folders & DB always --------------------
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
+# -------------------- DB Init --------------------
 with app.app_context():
     db.create_all()
 
-# -------------------- Main Entry Point --------------------
+# -------------------- Run Server --------------------
 if __name__ == '__main__':
     app.run(debug=True)
