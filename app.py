@@ -143,6 +143,10 @@ def delete_post(post_id):
         return redirect(url_for('login'))
 
     post = Post.query.get_or_404(post_id)
+
+    # Optional: Delete image from Cloudinary (advanced: if you store the public_id)
+    # Example: cloudinary.uploader.destroy(post.public_id)
+
     db.session.delete(post)
     db.session.commit()
     flash('Post deleted successfully.', 'success')

@@ -526,3 +526,7 @@ body {
 .search-form button:hover {
   background-color: #003fbd;
 }
+.card.broken {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
