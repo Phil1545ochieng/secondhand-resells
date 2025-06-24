@@ -15,9 +15,8 @@ logging.basicConfig(level=logging.DEBUG)
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with strong key
+app.secret_key = 'your_secret_key'
 
-# Upload folder for local fallback (not used for Render/Cloudinary)
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -25,16 +24,14 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# PostgreSQL DB on Render
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///fallback.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Configure Cloudinary from .env
+# Configure Cloudinary
 cloudinary.config()
 
-# Admin login credentials
 ADMIN_USERNAME = "Androsvela"
 ADMIN_PASSWORD = "Androsvela@23"
 
@@ -48,7 +45,7 @@ class Post(db.Model):
     reason = db.Column(db.Text)
     location = db.Column(db.String(100))
     contact = db.Column(db.String(100))
-    image_filename = db.Column(db.String(300))  # Now stores Cloudinary URL
+    image_filename = db.Column(db.String(300))  # Cloudinary URL
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # -------------------- Helpers --------------------
@@ -117,9 +114,8 @@ def post():
 
         image_filename = None
         if file and allowed_file(file.filename):
-            # ✅ Upload to Cloudinary
             upload_result = cloudinary.uploader.upload(file)
-            image_filename = upload_result.get('secure_url')  # Store the hosted image URL
+            image_filename = upload_result.get('secure_url')
 
         new_post = Post(
             title=title,
@@ -145,15 +141,10 @@ def delete_post(post_id):
     if not session.get('admin_logged_in'):
         flash('Access denied.', 'danger')
         return redirect(url_for('login'))
-
     post = Post.query.get_or_404(post_id)
-    try:
-        db.session.delete(post)
-        db.session.commit()
-        flash('Post deleted successfully.', 'success')
-    except Exception as e:
-        db.session.rollback()
-        flash('An error occurred while deleting.', 'danger')
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post deleted successfully.', 'success')
     return redirect(url_for('listings'))
 
 # -------------------- DB Init --------------------

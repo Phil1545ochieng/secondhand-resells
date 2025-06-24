@@ -103,6 +103,7 @@
       width: 300px;
       padding: 1rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      position: relative;
     }
 
     .card img {
@@ -156,9 +157,16 @@
       border-radius: 10px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .delete-button {
+      background-color: #ff4d4f;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: none;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
@@ -175,9 +183,6 @@
         <a href="/listings" class="active">Listings</a>
         <a href="/post">Post</a>
         <a href="/contact">Contact</a>
-        {% if session.admin_logged_in %}
-          <a href="/logout">Logout</a>
-        {% endif %}
       </nav>
     </div>
   </header>
@@ -205,18 +210,9 @@
               <p><strong>Location:</strong> {{ post.location }}</p>
               <p><strong>Contact:</strong> {{ post.contact }}</p>
               <p><strong>Reason:</strong> {{ post.reason }}</p>
-
               {% if session.admin_logged_in %}
-                <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST" style="margin-top: 0.5rem;">
-                  <button type="submit" style="
-                    background-color: #ff4d4f;
-                    color: white;
-                    border: none;
-                    padding: 0.5rem 1rem;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-size: 0.85rem;
-                  " onclick="return confirm('Are you sure you want to delete this post?');">
+                <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                  <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this post?');">
                     Delete
                   </button>
                 </form>
@@ -237,7 +233,7 @@
     <img id="lightbox-img" src="" alt="Preview">
   </div>
 
-  <!-- Lightbox JavaScript -->
+  <!-- JavaScript -->
   <script>
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -253,6 +249,15 @@
     lightbox.addEventListener('click', () => {
       lightbox.classList.remove('active');
       lightboxImg.src = '';
+    });
+
+    document.querySelectorAll('.card img').forEach(img => {
+      img.onerror = function () {
+        const button = this.closest('.card').querySelector('.delete-button');
+        if (button) {
+          button.style.display = 'inline-block';
+        }
+      };
     });
   </script>
 
