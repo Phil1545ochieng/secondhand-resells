@@ -2,33 +2,32 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
-from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 import logging
 
-# Enable logging
+# Logging for debug
 logging.basicConfig(level=logging.DEBUG)
 
-# Load environment variables from .env
+# Load .env
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Setup paths
+# Set up database and uploads
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///fallback.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 db = SQLAlchemy(app)
 
-# Cloudinary setup
+# Cloudinary config
 cloudinary.config()
 
 # Admin credentials
@@ -49,6 +48,7 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # -------------------- Helpers --------------------
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -138,19 +138,10 @@ def post():
 
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
-    if not session.get('admin_logged_in'):
-        flash('Access denied.', 'danger')
-        return redirect(url_for('login'))
-
     post = Post.query.get_or_404(post_id)
-
-    # Optional: Delete image from Cloudinary (advanced: if you store the public_id)
-    # Example: cloudinary.uploader.destroy(post.public_id)
-
     db.session.delete(post)
     db.session.commit()
-    flash('Post deleted successfully.', 'success')
-    return redirect(url_for('listings'))
+    return '', 204  # No redirect, used for AJAX delete
 
 # -------------------- DB Init --------------------
 with app.app_context():

@@ -115,10 +115,6 @@
       cursor: pointer;
     }
 
-    .card img.broken {
-      border: 2px solid red;
-    }
-
     .card h4 {
       color: #0057ff;
       margin: 0.5rem 0;
@@ -137,8 +133,8 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.85rem;
-      margin-top: 0.5rem;
       display: none;
+      margin-top: 0.5rem;
     }
 
     .footer {
@@ -221,13 +217,9 @@
               <p><strong>Contact:</strong> {{ post.contact }}</p>
               <p><strong>Reason:</strong> {{ post.reason }}</p>
 
-              {% if session.admin_logged_in %}
-              <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
-                <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this post?');">
-                  Delete Entire Post
-                </button>
+              <form class="delete-form" data-post-id="{{ post.id }}" style="display: none;">
+                <button type="submit" class="delete-button">Delete Entire Post</button>
               </form>
-              {% endif %}
             </div>
           {% endfor %}
         </div>
@@ -244,7 +236,7 @@
     <img id="lightbox-img" src="" alt="Preview">
   </div>
 
-  <!-- JS -->
+  <!-- JavaScript -->
   <script>
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -262,14 +254,29 @@
       lightboxImg.src = '';
     });
 
-    // Handle broken images
     document.querySelectorAll('.card img').forEach(img => {
       img.onerror = function () {
-        this.classList.add('broken');
         const card = this.closest('.card');
-        const deleteBtn = card.querySelector('.delete-button');
-        if (deleteBtn) deleteBtn.style.display = 'inline-block';
+        const form = card.querySelector('.delete-form');
+        if (form) {
+          form.style.display = 'inline-block';
+        }
       };
+    });
+
+    document.querySelectorAll('.delete-form').forEach(form => {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const postId = form.getAttribute('data-post-id');
+        if (confirm("Are you sure you want to delete this broken post?")) {
+          const response = await fetch(`/delete/${postId}`, { method: 'POST' });
+          if (response.ok) {
+            form.closest('.card').remove();
+          } else {
+            alert("Failed to delete post.");
+          }
+        }
+      });
     });
   </script>
 
