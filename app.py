@@ -7,41 +7,39 @@ import cloudinary
 import cloudinary.uploader
 import logging
 
-# Enable logging
-logging.basicConfig(level=logging.DEBUG)
-
 # Load .env variables
 load_dotenv()
+
+# Enable logging
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Paths and config
+# Paths
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Configs
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///fallback.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Init DB
-db = SQLAlchemy(app)
-
-# Allowed image extensions
+# File types
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Configure Cloudinary
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
+# Init database
+db = SQLAlchemy(app)
+
+# Cloudinary config
+cloudinary.config()
 
 # Admin credentials
 ADMIN_USERNAME = "Androsvela"
 ADMIN_PASSWORD = "Androsvela@23"
 
-# -------------------- Model --------------------
+# ------------------- Models -------------------
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -51,15 +49,14 @@ class Post(db.Model):
     reason = db.Column(db.Text)
     location = db.Column(db.String(100))
     contact = db.Column(db.String(100))
-    image_filename = db.Column(db.String(300))
+    image_filename = db.Column(db.String(300))  # Cloudinary URL
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-# -------------------- Helpers --------------------
+# ------------------- Helpers -------------------
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# -------------------- Routes --------------------
-
+# ------------------- Routes -------------------
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -145,17 +142,21 @@ def post():
 
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
-    # Note: No login check here – because we want to allow deleting broken posts directly from listings
+    if not session.get('admin_logged_in'):
+        flash('Access denied. Please log in.', 'danger')
+        return redirect(url_for('login'))
+
     post = Post.query.get_or_404(post_id)
+    logging.info(f"Deleting post ID {post.id}: '{post.title}'")
     db.session.delete(post)
     db.session.commit()
     flash('Post deleted successfully.', 'success')
     return redirect(url_for('listings'))
 
-# -------------------- DB Init --------------------
+# ------------------- DB Init -------------------
 with app.app_context():
     db.create_all()
 
-# -------------------- Run --------------------
+# ------------------- Run -------------------
 if __name__ == '__main__':
     app.run(debug=True)
