@@ -140,6 +140,22 @@ def post():
 
     return render_template('post.html')
 
+@app.route('/delete/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    if not session.get('admin_logged_in'):
+        flash('Access denied.', 'danger')
+        return redirect(url_for('login'))
+
+    post = Post.query.get_or_404(post_id)
+    try:
+        db.session.delete(post)
+        db.session.commit()
+        flash('Post deleted successfully.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while deleting.', 'danger')
+    return redirect(url_for('listings'))
+
 # -------------------- DB Init --------------------
 with app.app_context():
     db.create_all()
