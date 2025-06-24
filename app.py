@@ -8,7 +8,7 @@ import cloudinary
 import cloudinary.uploader
 import logging
 
-# Enable logging for debugging
+# Enable logging
 logging.basicConfig(level=logging.DEBUG)
 
 # Load environment variables from .env
@@ -17,25 +17,25 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+# Setup paths
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///fallback.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 db = SQLAlchemy(app)
 
-# Configure Cloudinary
+# Cloudinary setup
 cloudinary.config()
 
+# Admin credentials
 ADMIN_USERNAME = "Androsvela"
 ADMIN_PASSWORD = "Androsvela@23"
 
-# -------------------- Model --------------------
+# -------------------- Database Model --------------------
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -45,7 +45,7 @@ class Post(db.Model):
     reason = db.Column(db.Text)
     location = db.Column(db.String(100))
     contact = db.Column(db.String(100))
-    image_filename = db.Column(db.String(300))  # Cloudinary URL
+    image_filename = db.Column(db.String(300))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # -------------------- Helpers --------------------
@@ -141,6 +141,7 @@ def delete_post(post_id):
     if not session.get('admin_logged_in'):
         flash('Access denied.', 'danger')
         return redirect(url_for('login'))
+
     post = Post.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
