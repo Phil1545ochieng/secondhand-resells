@@ -7,34 +7,41 @@ import cloudinary
 import cloudinary.uploader
 import logging
 
-# Logging for debug
+# Enable logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Load .env
+# Load .env variables
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Set up database and uploads
+# Paths and config
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///fallback.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Init DB
 db = SQLAlchemy(app)
 
-# Cloudinary config
-cloudinary.config()
+# Allowed image extensions
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
+)
 
 # Admin credentials
 ADMIN_USERNAME = "Androsvela"
 ADMIN_PASSWORD = "Androsvela@23"
 
-# -------------------- Database Model --------------------
+# -------------------- Model --------------------
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -48,11 +55,11 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # -------------------- Helpers --------------------
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # -------------------- Routes --------------------
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -138,15 +145,17 @@ def post():
 
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
+    # Note: No login check here – because we want to allow deleting broken posts directly from listings
     post = Post.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-    return '', 204  # No redirect, used for AJAX delete
+    flash('Post deleted successfully.', 'success')
+    return redirect(url_for('listings'))
 
 # -------------------- DB Init --------------------
 with app.app_context():
     db.create_all()
 
-# -------------------- Run Server --------------------
+# -------------------- Run --------------------
 if __name__ == '__main__':
     app.run(debug=True)
