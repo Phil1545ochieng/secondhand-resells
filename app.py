@@ -153,6 +153,11 @@ def delete_post(post_id):
     flash('Post deleted successfully.', 'success')
     return redirect(url_for('listings'))
 
+# ✅ Google Verification Route
+@app.route('/google25c6b8d64e544aa2.html')
+def google_verification():
+    return app.send_static_file('google25c6b8d64e544aa2.html')
+
 # ------------------- DB Init -------------------
 with app.app_context():
     db.create_all()
