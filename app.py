@@ -158,6 +158,11 @@ def delete_post(post_id):
 def google_verification():
     return app.send_static_file('google25c6b8d64e544aa2.html')
 
+# ✅ Sitemap Route
+@app.route('/sitemap.xml')
+def sitemap():
+    return app.send_static_file('sitemap.xml')
+
 # ------------------- DB Init -------------------
 with app.app_context():
     db.create_all()
